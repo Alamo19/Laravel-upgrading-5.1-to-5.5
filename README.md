@@ -171,6 +171,14 @@ Require-dev部分`phpunit/phpunit  ~5.7`
 
 新增事件`Illuminate\Routing\Database\Eloquent\Concerns\HasEvents.php`
 
+#### 5、pagination
+
+`Illuminate\Pagination\AbstractPaginator.php`文件中
+
+`addQuery`方法修饰由`public`改为`protected`
+
+直接调用`addQuery`方法的地方可改为调用`appends`方法
+
 
 ### Laravel5.4升级到5.5
 
