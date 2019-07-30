@@ -133,7 +133,7 @@ public function boot()
 
 #### 4、session
 
-5.3以后的版本`controller`的构造方法`____construct`无法获取`session`,可用方法如下：
+5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`,可用方法如下：
 
 ```php
     $this->middleware(function ($request, $next) {
