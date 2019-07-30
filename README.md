@@ -131,7 +131,17 @@ public function boot()
 
 使用到的地方调整为`Illuminate\Database\Eloquent\Scope`
 
+#### 4、session
 
+5.3以后的版本`controller`的构造方法`____construct`无法获取`session`,可用方法如下：
+
+```php
+    $this->middleware(function ($request, $next) {
+            $passport = $request->session()->get('passport');
+            
+            return $next($request);
+        }); 
+``` 
 
 ### Laravel5.3升级到5.4
 
