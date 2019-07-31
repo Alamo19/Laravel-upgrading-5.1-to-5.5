@@ -131,9 +131,11 @@ public function boot()
 
 使用到的地方调整为`Illuminate\Database\Eloquent\Scope`
 
-#### 4、session
+#### 4、路由中间件
 
-5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`,可用方法如下：
+5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`,
+原因5.3及以后的版本中实例化控制器时不再执行路由中间件，调用具体方法时才会执行
+可用方法如下：
 
 ```php
     $this->middleware(function ($request, $next) {
