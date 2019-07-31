@@ -188,6 +188,20 @@ public function boot()
         }); 
 ``` 
 
+或者
+`App\Http\Kernel`的`$middleware`属性开启`session`中间件`StartSession`、`EncryptCookies`
+```php
+    protected $middleware = [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \App\Http\Middleware\TrimStrings::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\TrustProxies::class,
+		\App\Http\Middleware\EncryptCookies::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+    ]; 
+``` 
+
 ### Laravel5.3升级到5.4
 
 
