@@ -133,8 +133,51 @@ public function boot()
 
 #### 4、路由中间件
 
-5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`,
-原因5.3及以后的版本中实例化控制器时不再执行路由中间件，调用具体方法时才会执行
+5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`
+
+原因5.3之前版本路由中间件先执行再实例控制器
+`Illuminate\Routing\Router.php`
+```php
+    protected function runRouteWithinStack(Route $route, Request $request)
+    {
+        $shouldSkipMiddleware = $this->container->bound('middleware.disable') &&
+                                $this->container->make('middleware.disable') === true;
+
+        $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddlewares($route);
+
+        return (new Pipeline($this->container))
+                        ->send($request)
+                        ->through($middleware)
+                        ->then(function ($request) use ($route) {
+                            return $this->prepareResponse(
+                                $request,
+                                $route->run($request)//此处进行控制器实例化
+                            );
+                        });
+    } 
+```
+ 
+5.3及以后版本中获取控制器路由中间件时会先实例化控制器再执行路由中间件
+`Illuminate\Routing\Router.php`
+```php
+    protected function runRouteWithinStack(Route $route, Request $request)
+    {
+        $shouldSkipMiddleware = $this->container->bound('middleware.disable') &&
+                                $this->container->make('middleware.disable') === true;
+
+        $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddleware($route);//此处获取路由中间件是实例化控制器
+
+        return (new Pipeline($this->container))
+                        ->send($request)
+                        ->through($middleware)
+                        ->then(function ($request) use ($route) {
+                            return $this->prepareResponse(
+                                $request, $route->run()
+                            );
+                        });
+    }
+```
+
 可用方法如下：
 
 ```php
