@@ -83,6 +83,8 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 
 可通过配置项`modes`进行兼容
 
+`sql_modes`参考地址https://www.cnblogs.com/Zender/p/8270833.html
+
 ### Laravel5.2升级到5.3
 #### 1、更新依赖
 更新`composer.json`
