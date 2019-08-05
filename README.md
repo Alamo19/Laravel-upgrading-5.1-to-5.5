@@ -72,6 +72,16 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 #### 5、Jobs调整
 在创建任务/命令时你不再需要实现`SelfHandling`契约
 
+#### 6、database.php中`connections.mysql.strict`
+`strict`为`false`时
+
+5.1版本中
+`set session sql_mode=''`
+
+5.2及之后版本
+`set session sql_mode='NO_ENGINE_SUBSTITUTION'`
+
+可通过配置项`modes`进行兼容
 
 ### Laravel5.2升级到5.3
 #### 1、更新依赖
