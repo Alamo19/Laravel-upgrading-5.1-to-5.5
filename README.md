@@ -264,8 +264,7 @@ Require-dev部分`phpunit/phpunit  ~5.7`
 #### 6、中间件
 
 `app/Http/Kernel.php`中`middleware`新增中间件`\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class`
-将空字符串转换为null,当mysql配置严格模式`strict`设置为`false`时，添加数据时空字段执行sql语句时转换为null,导致sql语句报错,
-可取消此中间件
+将空字符串转换为`null`,当`mysql`配置严格模式`strict`设置为`false`时，添加数据时空字段的值`null`,导致执行sql语句报错,可取消此中间件
 
 ### Laravel5.4升级到5.5
 
