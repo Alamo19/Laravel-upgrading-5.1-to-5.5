@@ -73,6 +73,7 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 在创建任务/命令时你不再需要实现`SelfHandling`契约
 
 #### 6、database.php中`connections.mysql.strict`
+
 `strict`为`false`时
 
 5.1版本中
@@ -260,6 +261,11 @@ Require-dev部分`phpunit/phpunit  ~5.7`
 
 直接调用`addQuery`方法的地方可改为调用`appends`方法
 
+#### 6、中间件
+
+`app/Http/Kernel.php`中`middleware`新增中间件`\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class`
+将空字符串转换为null,当mysql配置严格模式`strict`设置为`false`时，添加数据时空字段执行sql语句时转换为null,导致sql语句报错,
+可取消此中间件
 
 ### Laravel5.4升级到5.5
 
