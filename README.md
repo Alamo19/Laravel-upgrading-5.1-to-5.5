@@ -366,3 +366,9 @@ class EncryptCookies extends Middleware
     ];
 }
 ```
+
+#### 6、request的only方法
+
+5.4及之前版本,如果对应键值不存在，对应键值为null
+5.5版本，如果对应键值不存在，对应键不返回
+
