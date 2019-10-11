@@ -1,9 +1,12 @@
-# Laravel-upgrading-5.1-to-5.5
+[TOC]
+
+
 
 ### Composer镜像加速：
+
    ```bash
    $> composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-   ``` 
+   ```
 
 - https://packagist.phpcomposer.com
 
@@ -25,31 +28,31 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 #### 1、更新依赖
 
    删除`illuminate/html`、`laravelcollective/html`包，使用composer remove 包名命令
-   
+
    更新`composer.json`
     
    Require部分`laravel/framework 5.2.*`项目所有依赖检查是否支持5.2框架版本并更新
-   
+
    Require-dev部分新增`symfony/dom-crawler ~3.0`和`symfony/css-selector ~3.0`
 
    执行
    ```bash
    $> composer update -vvv
-   ```         
+   ```
    如果出现错误`Something's changed, looking at all rules again (pass #23)`，说明项目依赖包与框架包不匹配
 #### 2、config调整
    `app.php`文件中,删除
-   
+
    `Illuminate\Foundation\Providers\ArtisanServiceProvider` 
          
    `Illuminate\Routing\ControllerServiceProvider`
-   
+
    `Illuminate\Html\HtmlServiceProvider`
 
    `App\Providers\BusServiceProvider`
 
 #### 3、Controller.php基类
-     
+
 `use Illuminate\Foundation\Bus\DispatchesCommands`
 
 更换为
@@ -73,7 +76,6 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 在创建任务/命令时你不再需要实现`SelfHandling`契约
 
 #### 6、database.php中`connections.mysql.strict`
-
 `strict`为`false`时
 
 5.1版本中
@@ -82,14 +84,11 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 5.2及之后版本
 `set session sql_mode='NO_ENGINE_SUBSTITUTION'`
 
-可通过配置项`modes`进行兼容
-
-`sql_modes`参考地址https://www.cnblogs.com/Zender/p/8270833.html
 
 ### Laravel5.2升级到5.3
 #### 1、更新依赖
 更新`composer.json`
- 
+
 Require部分`laravel/framework 5.3.*`项目所有依赖检查是否支持5.2框架版本并更新
          
 Require-dev部分`phpunit/phpunit  ~5.0 `、`symfony/dom-crawler  3.1.*`、`symfony/css-selector 3.1.*`
@@ -97,7 +96,7 @@ Require-dev部分`phpunit/phpunit  ~5.0 `、`symfony/dom-crawler  3.1.*`、`symf
 执行
    ```bash
    $> composer update -vvv
-   ```         
+   ```
    如果出现错误`Something's changed, looking at all rules again (pass #23)`，说明项目依赖包与框架包不匹配
 
 laravel/tinker安装
@@ -117,7 +116,7 @@ public function boot(DispatcherContract $events)
 public function boot()
     {
     parent::boot();
-``` 
+```
 
 
 `RouteServiceProvider.php`
@@ -136,7 +135,7 @@ public function boot()
 {
     //
     parent::boot(); 
-``` 
+```
 
 #### 3、scode错误
 
@@ -144,11 +143,11 @@ public function boot()
 
 使用到的地方调整为`Illuminate\Database\Eloquent\Scope`
 
-#### 4、路由中间件
+#### 4、session
 
-5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`
-
+5.3及以后的版本`controller`的构造方法`____construct`无法获取`session`,
 原因5.3之前版本路由中间件先执行再实例控制器
+
 `Illuminate\Routing\Router.php`
 ```php
     protected function runRouteWithinStack(Route $route, Request $request)
@@ -169,7 +168,7 @@ public function boot()
                         });
     } 
 ```
- 
+
 5.3及以后版本中获取控制器路由中间件时会先实例化控制器再执行路由中间件
 `Illuminate\Routing\Router.php`
 ```php
@@ -178,7 +177,7 @@ public function boot()
         $shouldSkipMiddleware = $this->container->bound('middleware.disable') &&
                                 $this->container->make('middleware.disable') === true;
 
-        $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddleware($route);//此处获取路由中间件是实例化控制器
+        $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddleware($route);//此处获取路由中间件时实例化控制器
 
         return (new Pipeline($this->container))
                         ->send($request)
@@ -199,7 +198,7 @@ public function boot()
             
             return $next($request);
         }); 
-``` 
+```
 
 或者
 `App\Http\Kernel`的`$middleware`属性开启`session`中间件`StartSession`、`EncryptCookies`
@@ -213,14 +212,15 @@ public function boot()
 		\App\Http\Middleware\EncryptCookies::class,
         \Illuminate\Session\Middleware\StartSession::class,
     ]; 
-``` 
+```
+
 
 ### Laravel5.3升级到5.4
 
 
 #### 1、更新依赖
 更新`composer.json`
- 
+
 Require部分`laravel/framework 5.4.*`项目所有依赖检查是否支持5.4框架版本并更新
 
 Require-dev部分`phpunit/phpunit  ~5.7` 
@@ -228,9 +228,9 @@ Require-dev部分`phpunit/phpunit  ~5.7`
 执行
    ```bash
    $> composer update -vvv
-   ```         
+   ```
    如果出现错误`Something's changed, looking at all rules again (pass #23)`，说明项目依赖包与框架包不匹配
-   
+
 
 #### 2、Session
 
@@ -270,7 +270,7 @@ Require-dev部分`phpunit/phpunit  ~5.7`
 
 #### 1、更新依赖
 更新`composer.json`
- 
+
 Require部分`php >=7.0.0 `,`laravel/framework 5.5.*`,`fideloper/proxy:~3.3`项目所有依赖检查是否支持5.5框架版本并更新
          
 Require-dev部分`phpunit/phpunit  ~6.0` ,`filp/whoops ~2.0`
@@ -278,7 +278,7 @@ Require-dev部分`phpunit/phpunit  ~6.0` ,`filp/whoops ~2.0`
 执行
    ```bash
    $> composer update -vvv
-   ```         
+   ```
    如果出现错误`Something's changed, looking at all rules again (pass #23)`，说明项目依赖包与框架包不匹配
       
 
@@ -297,7 +297,7 @@ require __DIR__.'/../bootstrap/autoload.php';
 
 ```php
 require __DIR__.'/../vendor/autoload.php'; 
-``` 
+```
 
 #### 4、cookie中间件EncryptCookies
 
@@ -366,10 +366,3 @@ class EncryptCookies extends Middleware
     ];
 }
 ```
-
-#### 5、request的only方法
-
-5.4及之前版本,如果对应键值不存在，对应键值为null
-
-5.5版本，如果对应键值不存在，对应键不返回
-
