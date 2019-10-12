@@ -84,6 +84,8 @@ https://github.com/laravel/laravel/compare/5.3...5.4
 5.2及之后版本
 `set session sql_mode='NO_ENGINE_SUBSTITUTION'`
 
+可通过配置项`modes`进行兼容
+`sql_modes`参考地址<https://www.cnblogs.com/Zender/p/8270833.html>
 
 ### Laravel5.2升级到5.3
 #### 1、更新依赖
@@ -366,3 +368,7 @@ class EncryptCookies extends Middleware
     ];
 }
 ```
+#### 5、request的only方法
+
+5.4及之前版本,如果对应键值不存在，对应键值为null
+5.5版本，如果对应键值不存在，对应键不返回
